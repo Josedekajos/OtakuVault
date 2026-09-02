@@ -1,0 +1,334 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  background-color: #f6f5fb;
+  color: #1e1b2e;
+}
+
+/* ---------------------------------------------------------- */
+/* Layout                                                      */
+/* ---------------------------------------------------------- */
+
+.navbar {
+  background: linear-gradient(135deg, #2d1b4e 0%, #4a2a7a 60%, #7b3fa0 100%);
+  color: white;
+  padding: 20px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-title {
+  font-size: 26px;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #ffb3ec, #ffe08a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar-subtitle {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #d9cdf0;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.navbar-user {
+  font-size: 13px;
+  color: #e6dbfa;
+  margin-right: 4px;
+}
+
+.container {
+  max-width: 960px;
+  margin: 28px auto;
+  padding: 0 16px;
+}
+
+/* ---------------------------------------------------------- */
+/* Cards / forms                                               */
+/* ---------------------------------------------------------- */
+
+.card {
+  background: white;
+  border: 1px solid #e7e1f5;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(74, 42, 122, 0.06);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 19px;
+  color: #2d1b4e;
+}
+
+.character-form label,
+.auth-card label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3a2c5a;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+textarea {
+  width: 100%;
+  padding: 9px 10px;
+  margin-top: 5px;
+  border: 1px solid #d8cff0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fbfaff;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #9b5de5;
+  background: white;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------- */
+/* Buttons                                                     */
+/* ---------------------------------------------------------- */
+
+.btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+  opacity: 0.92;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #9b5de5, #6a2ea0);
+  color: white;
+}
+
+.btn-secondary {
+  background: #ece5fa;
+  color: #3a2c5a;
+}
+
+.btn-danger {
+  background: #ffe1e6;
+  color: #b3243b;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #7b3fa0;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.link-button:hover {
+  color: #5a2b7a;
+}
+
+/* ---------------------------------------------------------- */
+/* Messages                                                     */
+/* ---------------------------------------------------------- */
+
+.message {
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.message.error {
+  background-color: #fde3e8;
+  color: #a3213a;
+  border: 1px solid #f6b9c6;
+}
+
+.message.success {
+  background-color: #e3f7e9;
+  color: #1f7a44;
+  border: 1px solid #b7ebc6;
+}
+
+.loading-text {
+  color: #6a5a8a;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* ---------------------------------------------------------- */
+/* Character grid                                               */
+/* ---------------------------------------------------------- */
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.character-card {
+  background: white;
+  border: 1px solid #e7e1f5;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(74, 42, 122, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.character-image-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f1ecfa;
+}
+
+.character-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.character-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a695c9;
+  font-size: 13px;
+}
+
+.character-info {
+  padding: 14px;
+  flex-grow: 1;
+}
+
+.character-info h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #2d1b4e;
+}
+
+.character-info p {
+  margin: 0;
+  font-size: 13px;
+  color: #5a4a7a;
+  line-height: 1.4;
+}
+
+.character-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.empty-state-card {
+  text-align: center;
+  color: #6a5a8a;
+}
+
+/* ---------------------------------------------------------- */
+/* Auth pages (Login / Sign Up / Verify Email)                 */
+/* ---------------------------------------------------------- */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at top, #f0e9fb 0%, #f6f5fb 60%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.auth-card h2 {
+  text-align: left;
+}
+
+.auth-card label {
+  text-align: left;
+}
+
+.auth-subtext {
+  font-size: 13px;
+  color: #6a5a8a;
+  margin-top: -6px;
+  margin-bottom: 14px;
+}
+
+.auth-switch {
+  margin-top: 16px;
+  margin-bottom: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .navbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
