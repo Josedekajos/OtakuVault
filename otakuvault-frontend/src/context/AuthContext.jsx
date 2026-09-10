@@ -1,9 +1,11 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { Hub } from "aws-amplify/utils";
 import {
   signUp as amplifySignUp,
   confirmSignUp as amplifyConfirmSignUp,
   resendSignUpCode as amplifyResendSignUpCode,
   signIn as amplifySignIn,
+  signInWithRedirect,
   signOut as amplifySignOut,
   getCurrentUser,
   fetchUserAttributes,
@@ -13,9 +15,12 @@ import {
 // AUTH CONTEXT
 // ============================================================
 // Holds the signed-in user's info and exposes the auth actions
-// the rest of the app needs. Every action below calls the real
-// Amplify v6 API - Amplify itself manages token storage/refresh,
-// this context just tracks "who is currently signed in" for React.
+// the rest of the app needs. Google sign-in (loginWithGoogle)
+// redirects the whole page to Cognito's Hosted UI, then to
+// Google, then back - Cognito issues the SAME kind of JWT
+// either way, so nothing downstream (api.js, Lambda) needs to
+// know or care whether the user signed in with a password or
+// with Google.
 // ============================================================
 
 const AuthContext = createContext(null);
@@ -23,9 +28,6 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // { userId, email, name } | null
   const [authLoading, setAuthLoading] = useState(false);
-  // True only during the very first check, on page load, for whether
-  // Amplify already has a valid session (e.g. the user refreshed the
-  // page while logged in). Prevents a flash of the Login page.
   const [checkingSession, setCheckingSession] = useState(true);
 
   const isAuthenticated = !!user;
@@ -40,7 +42,6 @@ export function AuthProvider({ children }) {
         name: attrs.name || attrs.email,
       });
     } catch {
-      // No valid session - not an error, just means "logged out".
       setUser(null);
     }
   }, []);
@@ -50,6 +51,27 @@ export function AuthProvider({ children }) {
       await loadCurrentUser();
       setCheckingSession(false);
     })();
+  }, [loadCurrentUser]);
+
+  // --------------------------------------------------------
+  // Google sign-in leaves the page (redirect to Cognito's
+  // Hosted UI, then Google, then back). When the browser lands
+  // back on this app, Amplify finishes processing the OAuth
+  // response and emits a Hub event - this listener catches that
+  // moment and refreshes React's view of "who is signed in",
+  // without needing to change how the rest of the app reads
+  // auth state (isAuthenticated / user still come from here).
+  // --------------------------------------------------------
+  useEffect(() => {
+    const unsubscribe = Hub.listen("auth", ({ payload }) => {
+      if (payload.event === "signInWithRedirect") {
+        loadCurrentUser();
+      }
+      if (payload.event === "signInWithRedirect_failure") {
+        console.error("Google sign-in failed.");
+      }
+    });
+    return unsubscribe;
   }, [loadCurrentUser]);
 
   const login = useCallback(
@@ -64,6 +86,13 @@ export function AuthProvider({ children }) {
     },
     [loadCurrentUser]
   );
+
+  // Works for both sign-up AND sign-in: if this Google identity has
+  // never been seen before, Cognito creates a federated user for it
+  // automatically; if it has, this just signs them back in.
+  const loginWithGoogle = useCallback(async () => {
+    await signInWithRedirect({ provider: "Google" });
+  }, []);
 
   const signUp = useCallback(async (name, email, password) => {
     setAuthLoading(true);
@@ -109,6 +138,7 @@ export function AuthProvider({ children }) {
     authLoading,
     checkingSession,
     login,
+    loginWithGoogle,
     signUp,
     confirmSignUpCode,
     resendCode,
