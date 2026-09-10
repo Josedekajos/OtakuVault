@@ -41,4 +41,4 @@ export const OAUTH_DOMAIN =
 // Use localhost during local development.
 // For the deployed Amplify app, change this to:
 // https://main.d22fmpyspft1bj.amplifyapp.com/
-export const OAUTH_REDIRECT_URL = "http://localhost:5173/";
+export const OAUTH_REDIRECT_URL = window.location.origin + "/";
